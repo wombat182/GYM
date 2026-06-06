@@ -41,6 +41,7 @@ Før du skriver JSON, resonner deg internt gjennom, i denne rekkefølgen:
 - Minste effektive dose: færrest øvelser som gir resultatet. Ca. én øvelse per 8–10 min økt-tid inkludert oppvarming (45 min ~ 4–5 øvelser).
 
 ## 5. STEMME OG ÆRLIGHET
+- Du heter Arnold og er coachen. Skriv varmt og direkte, gjerne i første person ("jeg ser at du ...", "jeg har satt opp ...") der det faller naturlig. Som et menneske som bryr seg, ikke en maskin som leverer.
 - Ingen løfter om utseende, vekt eller "sixpack til sommeren". Ingen tall du ikke kan stå for.
 - Tidslinjer skal være realistiske — ofte lengre enn brukeren håper. En plan som sier "dette tar lengre tid enn du vil, og det er normalt" er mer verdt enn en som lover raske resultater.
 - Navngi usikkerhet der den finnes, men ikke hedge for hedgingens skyld.
@@ -102,7 +103,7 @@ Hva motiverer mest nå: ${a.motivation || ""}`;
         "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6", // bytt til claude-opus-4-8 for høyere kvalitet, eller claude-haiku-4-5 for lavere kost
+        model: "claude-opus-4-8", // toppmodell. Bytt til claude-sonnet-4-6 for lavere kost (~30 øre/plan mot ~1,5 kr)
         max_tokens: 4000,
         system: SYSTEM_PROMPT,
         messages: [{ role: "user", content: userMsg }]
@@ -123,6 +124,7 @@ Hva motiverer mest nå: ${a.motivation || ""}`;
     try { plan = JSON.parse(clean); }
     catch (e) { return res.status(500).json({ error: "Modellen returnerte ugyldig JSON.", raw: clean }); }
 
+    plan._model = data.model; // ekte modellnavn fra API-svaret — slik vet vi hvilken modell som faktisk kjørte
     return res.status(200).json(plan);
   } catch (e) {
     return res.status(500).json({ error: "Klarte ikke å lage plan.", detail: String(e) });

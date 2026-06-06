@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Settet</title>
+<title>Arnold</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,7 +25,6 @@
   body{background:var(--bg);color:var(--txt);font-family:var(--ui);font-size:17px;line-height:1.6;
     -webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
 
-  /* ---- ambient field ---- */
   .field{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
   .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;will-change:transform}
   .b1{width:60vw;height:60vw;background:radial-gradient(circle,var(--ember),transparent 70%);top:-18vw;right:-12vw;animation:drift1 26s var(--ease) infinite alternate}
@@ -37,111 +36,81 @@
   .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-  .shell{position:relative;z-index:2;max-width:720px;margin:0 auto;padding:0 22px;min-height:100vh;
-    display:flex;flex-direction:column}
+  .shell{position:relative;z-index:2;max-width:720px;margin:0 auto;padding:0 22px;min-height:100vh;display:flex;flex-direction:column}
   .topbar{display:flex;align-items:center;justify-content:space-between;padding:26px 2px 0}
   .logo{font-family:var(--mono);font-size:13px;letter-spacing:.38em;text-transform:uppercase;font-weight:500}
-  .logo .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ember);
-    margin-left:7px;box-shadow:0 0 12px var(--ember);animation:pulse 2.6s ease-in-out infinite}
+  .logo .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ember);margin-left:7px;box-shadow:0 0 12px var(--ember);animation:pulse 2.6s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  .topbar .tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--txt-dim)}
+  .topbar .tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt-dim)}
 
-  /* ---- screens ---- */
   .screen{display:none;flex:1}
   .screen.on{display:flex;flex-direction:column}
   .fadein{animation:scrn .65s var(--ease-2) both}
   @keyframes scrn{from{opacity:0;transform:translateY(14px) scale(.992)}to{opacity:1;transform:none}}
 
-  /* ---- buttons ---- */
-  .btn{font-family:var(--ui);font-weight:600;font-size:15px;letter-spacing:.01em;cursor:pointer;border:none;
-    color:#160d08;background:linear-gradient(180deg,#FF9461,var(--ember-2));border-radius:100px;
-    padding:16px 30px;position:relative;transition:transform .35s var(--ease),box-shadow .35s var(--ease),opacity .3s;
-    box-shadow:0 8px 30px -8px rgba(255,90,56,.6),inset 0 1px 0 rgba(255,255,255,.35)}
+  .btn{font-family:var(--ui);font-weight:600;font-size:15px;letter-spacing:.01em;cursor:pointer;border:none;color:#160d08;background:linear-gradient(180deg,#FF9461,var(--ember-2));border-radius:100px;padding:16px 30px;position:relative;transition:transform .35s var(--ease),box-shadow .35s var(--ease),opacity .3s;box-shadow:0 8px 30px -8px rgba(255,90,56,.6),inset 0 1px 0 rgba(255,255,255,.35)}
   .btn:hover{transform:translateY(-2px);box-shadow:0 16px 44px -10px rgba(255,90,56,.7),inset 0 1px 0 rgba(255,255,255,.45)}
   .btn:active{transform:translateY(0) scale(.985)}
   .btn:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none;background:var(--glass-2);color:var(--txt-dim)}
   .btn.glass{background:var(--glass-2);color:var(--txt);box-shadow:inset 0 0 0 1px var(--stroke);backdrop-filter:blur(12px)}
   .btn.glass:hover{box-shadow:inset 0 0 0 1px var(--stroke-2);transform:translateY(-2px)}
-  .linkbtn{background:none;border:none;color:var(--txt-soft);font-family:var(--ui);font-size:14px;cursor:pointer;
-    letter-spacing:.02em;transition:color .25s} .linkbtn:hover{color:var(--txt)}
+  .linkbtn{background:none;border:none;color:var(--txt-soft);font-family:var(--ui);font-size:14px;cursor:pointer;letter-spacing:.02em;transition:color .25s} .linkbtn:hover{color:var(--txt)}
   .linkbtn[hidden]{visibility:hidden}
 
-  /* ---- INTRO ---- */
   #intro{justify-content:center;padding:30px 0 60px}
-  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ember);
-    margin-bottom:22px;display:flex;align-items:center;gap:10px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ember);margin-bottom:22px;display:flex;align-items:center;gap:10px}
   .eyebrow::before{content:"";width:26px;height:1px;background:var(--ember)}
-  #intro h1{font-family:var(--serif);font-weight:400;font-size:clamp(46px,9vw,82px);line-height:.98;
-    letter-spacing:-.015em;margin-bottom:26px}
-  #intro h1 em{font-style:italic;background:linear-gradient(120deg,var(--ember),#FFB07A);
-    -webkit-background-clip:text;background-clip:text;color:transparent}
-  #intro .lede{font-size:20px;color:var(--txt-soft);max-width:34ch;margin-bottom:40px;line-height:1.5}
+  #intro h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,8.5vw,78px);line-height:1;letter-spacing:-.015em;margin-bottom:26px}
+  #intro h1 em{font-style:italic;background:linear-gradient(120deg,var(--ember),#FFB07A);-webkit-background-clip:text;background-clip:text;color:transparent}
+  #intro .lede{font-size:20px;color:var(--txt-soft);max-width:38ch;margin-bottom:40px;line-height:1.55}
   .cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
   .cta-row .price{font-family:var(--mono);font-size:13px;color:var(--txt-soft);letter-spacing:.03em}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:54px}
   @media(max-width:560px){.cards{grid-template-columns:1fr}}
-  .card{background:var(--glass);border:1px solid var(--stroke);border-radius:18px;padding:20px 22px;
-    backdrop-filter:blur(14px);transition:transform .4s var(--ease),border-color .4s}
+  .card{background:var(--glass);border:1px solid var(--stroke);border-radius:18px;padding:20px 22px;backdrop-filter:blur(14px);transition:transform .4s var(--ease),border-color .4s}
   .card:hover{transform:translateY(-3px);border-color:var(--stroke-2)}
   .card .k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt-dim);margin-bottom:8px}
-  .card p{font-size:15px;color:var(--txt);line-height:1.45}
+  .card p{font-size:15px;color:var(--txt);line-height:1.5}
 
-  /* ---- QUIZ ---- */
   #quiz{padding:28px 0 50px}
   .prog{display:flex;align-items:center;gap:16px;margin:18px 0 48px}
   .prog .c{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--txt-soft);white-space:nowrap}
   .track{flex:1;height:3px;border-radius:3px;background:var(--glass-2);overflow:hidden}
-  .track i{display:block;height:100%;border-radius:3px;width:7%;
-    background:linear-gradient(90deg,var(--ember),#FFB07A);box-shadow:0 0 16px var(--ember);
-    transition:width .6s var(--ease)}
+  .track i{display:block;height:100%;border-radius:3px;width:7%;background:linear-gradient(90deg,var(--ember),#FFB07A);box-shadow:0 0 16px var(--ember);transition:width .6s var(--ease)}
   .q .kick{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ember);margin-bottom:16px}
-  .q h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,6vw,46px);line-height:1.05;
-    letter-spacing:-.01em;margin-bottom:10px}
+  .q h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,6vw,46px);line-height:1.05;letter-spacing:-.01em;margin-bottom:10px}
   .q .hint{color:var(--txt-soft);font-size:16px;margin-bottom:30px;max-width:42ch;line-height:1.5}
   .chips{display:flex;flex-wrap:wrap;gap:11px}
-  .chip{font-family:var(--ui);font-weight:500;font-size:15px;padding:14px 22px;border-radius:100px;color:var(--txt);
-    background:var(--glass);border:1px solid var(--stroke);cursor:pointer;backdrop-filter:blur(10px);
-    transition:transform .3s var(--ease),background .3s,border-color .3s,box-shadow .3s;will-change:transform}
+  .chip{font-family:var(--ui);font-weight:500;font-size:15px;padding:14px 22px;border-radius:100px;color:var(--txt);background:var(--glass);border:1px solid var(--stroke);cursor:pointer;backdrop-filter:blur(10px);transition:transform .3s var(--ease),background .3s,border-color .3s,box-shadow .3s;will-change:transform}
   .chip:hover{transform:translateY(-2px);border-color:var(--stroke-2);background:var(--glass-2)}
   .chip:active{transform:translateY(0) scale(.97)}
-  .chip.on{background:linear-gradient(180deg,#FF9461,var(--ember-2));color:#160d08;border-color:transparent;
-    box-shadow:0 8px 26px -8px rgba(255,90,56,.6),inset 0 1px 0 rgba(255,255,255,.4)}
+  .chip.on{background:linear-gradient(180deg,#FF9461,var(--ember-2));color:#160d08;border-color:transparent;box-shadow:0 8px 26px -8px rgba(255,90,56,.6),inset 0 1px 0 rgba(255,255,255,.4)}
   .chip.danger.on{background:linear-gradient(180deg,#ff8a8a,#e0474a)}
   .ta-wrap{position:relative}
-  textarea{width:100%;min-height:128px;background:var(--glass);border:1px solid var(--stroke);border-radius:18px;
-    font-family:var(--ui);font-size:19px;color:var(--txt);padding:20px 22px;resize:vertical;line-height:1.5;
-    backdrop-filter:blur(10px);transition:border-color .3s,box-shadow .3s}
+  textarea{width:100%;min-height:128px;background:var(--glass);border:1px solid var(--stroke);border-radius:18px;font-family:var(--ui);font-size:19px;color:var(--txt);padding:20px 22px;resize:vertical;line-height:1.5;backdrop-filter:blur(10px);transition:border-color .3s,box-shadow .3s}
   textarea:focus{outline:none;border-color:rgba(255,122,69,.55);box-shadow:0 0 0 4px rgba(255,122,69,.12)}
   textarea::placeholder{color:var(--txt-dim)}
-  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:44px}
+  .ta-hint{font-family:var(--mono);font-size:11px;letter-spacing:.04em;margin-top:12px;height:14px;color:var(--txt-dim);transition:color .3s}
+  .ta-hint.ok{color:var(--mint)}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:40px}
 
-  /* ---- LOADING ---- */
   #loading{justify-content:center;align-items:flex-start;padding:30px 0 60px}
-  .orb{width:74px;height:74px;border-radius:50%;margin-bottom:34px;position:relative;
-    background:radial-gradient(circle at 35% 30%,#FFB07A,var(--ember-2) 60%,transparent 72%);
-    box-shadow:0 0 60px -6px var(--ember);animation:breathe 2.4s var(--ease) infinite}
-  .orb::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(255,122,69,.4);
-    animation:ring 2.4s var(--ease) infinite}
+  .orb{width:74px;height:74px;border-radius:50%;margin-bottom:34px;position:relative;background:radial-gradient(circle at 35% 30%,#FFB07A,var(--ember-2) 60%,transparent 72%);box-shadow:0 0 60px -6px var(--ember);animation:breathe 2.4s var(--ease) infinite}
+  .orb::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(255,122,69,.4);animation:ring 2.4s var(--ease) infinite}
   @keyframes breathe{0%,100%{transform:scale(.9)}50%{transform:scale(1.08)}}
   @keyframes ring{0%{transform:scale(.8);opacity:.8}100%{transform:scale(1.5);opacity:0}}
   #loading h2{font-family:var(--serif);font-weight:400;font-size:36px;margin-bottom:12px}
-  #loadmsg{font-family:var(--mono);font-size:13px;color:var(--txt-soft);letter-spacing:.04em;
-    transition:opacity .4s} 
+  #loadmsg{font-family:var(--mono);font-size:13px;color:var(--txt-soft);letter-spacing:.04em;transition:opacity .4s}
 
-  /* ---- RESULT ---- */
   #result{padding:30px 0 90px}
-  .demo-note{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ember);
-    border:1px solid rgba(255,122,69,.3);background:rgba(255,122,69,.08);border-radius:100px;
-    padding:8px 16px;display:inline-block;margin-bottom:28px}
+  .demo-note{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ember);border:1px solid rgba(255,122,69,.3);background:rgba(255,122,69,.08);border-radius:100px;padding:8px 16px;display:inline-block;margin-bottom:28px}
   .reveal{opacity:0;animation:rise .7s var(--ease-2) forwards}
   @keyframes rise{to{opacity:1;transform:none}}
   .r-kick{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ember);margin-bottom:14px}
   .r-title{font-family:var(--serif);font-weight:400;font-size:clamp(34px,7vw,56px);line-height:1;letter-spacing:-.015em;margin-bottom:26px}
-  .speil{font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.45;color:var(--txt);
-    padding-left:22px;border-left:2px solid var(--ember);margin-bottom:32px}
+  .speil{font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.45;color:var(--txt);padding-left:22px;border-left:2px solid var(--ember);margin-bottom:32px}
   .lead{font-size:18px;color:var(--txt-soft);margin-bottom:8px;line-height:1.55}
-  .block{background:var(--glass);border:1px solid var(--stroke);border-radius:22px;padding:26px 26px;
-    margin:18px 0;backdrop-filter:blur(14px)}
+  .block{background:var(--glass);border:1px solid var(--stroke);border-radius:22px;padding:26px 26px;margin:18px 0;backdrop-filter:blur(14px)}
   .block .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt-dim);margin-bottom:12px}
   .week strong{color:var(--txt);font-weight:600}
   .okt{padding:22px 0;border-top:1px solid var(--stroke)}
@@ -156,8 +125,7 @@
   .track-list{list-style:none;display:flex;flex-direction:column;gap:9px}
   .track-list li{padding-left:22px;position:relative;color:var(--txt-soft)}
   .track-list li::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--ember)}
-  .first{background:linear-gradient(135deg,rgba(255,122,69,.14),rgba(94,139,255,.08));
-    border:1px solid rgba(255,122,69,.3);border-radius:22px;padding:28px;margin:26px 0}
+  .first{background:linear-gradient(135deg,rgba(255,122,69,.14),rgba(94,139,255,.08));border:1px solid rgba(255,122,69,.3);border-radius:22px;padding:28px;margin:26px 0}
   .first .lbl{color:var(--ember)} .first p{font-size:19px;line-height:1.5}
   .actions{display:flex;gap:12px;flex-wrap:wrap;margin:34px 0}
   .offer{background:var(--glass-2);border:1px solid var(--stroke);border-radius:24px;padding:30px;margin-top:36px;backdrop-filter:blur(16px)}
@@ -166,7 +134,6 @@
   .offer .free{color:var(--mint)}
   .foot{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--txt-dim);margin-top:40px}
 
-  /* ---- HENVISNING ---- */
   .henv{padding:10px 0}
   .henv h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,6vw,44px);line-height:1.05;margin:14px 0 18px}
   .henv p{font-size:19px;color:var(--txt-soft);max-width:46ch;line-height:1.55;margin-bottom:14px}
@@ -174,7 +141,6 @@
   footer{position:relative;z-index:2;text-align:center;padding:30px 0 40px}
   footer span{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--txt-dim)}
 
-  /* ---- PDF (light, offscreen) ---- */
   #pdfdoc{position:absolute;left:-9999px;top:0;width:794px;background:#fff;color:#15140F;font-family:var(--ui)}
   #pdfdoc .pad{padding:56px 60px}
   #pdfdoc .pb{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#FF5A38}
@@ -204,22 +170,22 @@
 
 <div class="shell">
   <div class="topbar">
-    <div class="logo">Settet<span class="dot"></span></div>
-    <div class="tag">Trening, presist</div>
+    <div class="logo">Arnold<span class="dot"></span></div>
+    <div class="tag">I hjørnet ditt</div>
   </div>
 
   <!-- INTRO -->
   <section id="intro" class="screen on fadein">
-    <div class="eyebrow">Treningsplan</div>
-    <h1>Bygget for <em>deg</em>.<br>Ikke for alle.</h1>
-    <p class="lede">Fjorten spørsmål. Én plan som faktisk passer kroppen din, tiden din og målet ditt. Levert som PDF på sekunder.</p>
+    <div class="eyebrow">Hei, jeg er Arnold</div>
+    <h1>Fortell meg om deg.<br>Så bygger jeg <em>planen din</em>.</h1>
+    <p class="lede">Fjorten korte spørsmål. Jeg leser svarene og setter sammen en plan som passer kroppen din, tiden du har og målet ditt — ikke en mal jeg deler ut til alle.</p>
     <div class="cta-row">
-      <button class="btn" id="start">Lag planen min</button>
+      <button class="btn" id="start">Sett i gang</button>
       <span class="price">99 kr · ferdig med en gang</span>
     </div>
     <div class="cards">
-      <div class="card"><div class="k">Hvem</div><p>Laget av autorisert fysioterapeut og personlig trener — ikke en generisk mal.</p></div>
-      <div class="card"><div class="k">Etterpå</div><p>Ukentlig oppfølging på video. De to første ukene er gratis.</p></div>
+      <div class="card"><div class="k">Hvem står bak</div><p>Planene bygger på faget til en fysioterapeut og en personlig trener. Ekte kunnskap, ikke gjetting.</p></div>
+      <div class="card"><div class="k">Når du er i gang</div><p>Vil du, tar vi en prat på video hver uke. De to første er gratis.</p></div>
     </div>
   </section>
 
@@ -239,15 +205,15 @@
   <!-- LOADING -->
   <section id="loading" class="screen">
     <div class="orb"></div>
-    <h2>Setter sammen planen din</h2>
-    <div id="loadmsg">Leser svarene dine …</div>
+    <h2>Gi meg et øyeblikk</h2>
+    <div id="loadmsg">Leser gjennom svarene dine …</div>
   </section>
 
   <!-- RESULT -->
   <section id="result" class="screen"></section>
 </div>
 
-<footer><span>Settet · demo</span></footer>
+<footer><span>Arnold · demo</span></footer>
 <div id="pdfdoc"></div>
 
 <script>
@@ -257,19 +223,19 @@ const REDFLAGS=[
   "Graviditet med komplikasjoner","Nummenhet, utstråling eller kraftsvikt","Ingen av disse"
 ];
 const Q=[
-  {key:"goal",type:"text",kick:"Målet",title:"Hva vil du oppnå?",hint:"Skriv det med egne ord — det former hele planen.",ph:"F.eks. bli sterkere uten å bruke livet i gymmet …"},
+  {key:"goal",type:"text",min:14,kick:"Målet",title:"Hva vil du oppnå?",hint:"Skriv det med egne ord — jo mer du forteller, jo bedre treffer jeg.",ph:"F.eks. bli sterkere uten å bruke livet i gymmet …"},
   {key:"experience",type:"chips",kick:"Erfaring",title:"Hvor lenge har du trent?",opts:["Nybegynner (under 1 år)","Litt erfaren (1–3 år)","Erfaren (3+ år)"]},
   {key:"days",type:"chips",kick:"Tid",title:"Hvor mange dager i uka?",opts:["2","3","4","5","6"]},
   {key:"time",type:"chips",kick:"Tid",title:"Hvor lenge per økt?",opts:["30 min","45 min","60 min","75+ min"]},
   {key:"equipment",type:"chips",kick:"Sted",title:"Hvor trener du?",opts:["Fullt utstyrt gym","Hjemmegym med vekter","Kun kroppsvekt","Annet"]},
   {key:"sex",type:"chips",kick:"Deg",title:"Kjønn?",opts:["Mann","Kvinne","Annet / vil ikke si"]},
   {key:"age",type:"chips",kick:"Deg",title:"Alder?",opts:["Under 20","20–29","30–39","40–49","50–59","60+"]},
-  {key:"sleep",type:"chips",kick:"Restitusjon",title:"Hvordan sover du?",hint:"Avgjør hvor mye trening kroppen din faktisk tåler.",opts:["Dårlig","Middels","God"]},
+  {key:"sleep",type:"chips",kick:"Restitusjon",title:"Hvordan sover du?",hint:"Dette avgjør hvor mye trening kroppen din faktisk tåler.",opts:["Dårlig","Middels","God"]},
   {key:"stress",type:"chips",kick:"Restitusjon",title:"Stressnivå i hverdagen?",opts:["Lavt","Middels","Høyt"]},
-  {key:"injuries",type:"text",kick:"Helse",title:"Skader eller plager?",hint:"Beskriv det vi bør vite om. Skriv «ingen» hvis ingenting.",ph:"F.eks. korsryggen murrer hvis jeg løfter slurvete …"},
-  {key:"redflags",type:"multi",kick:"Helse",title:"Gjelder noe av dette deg?",hint:"Vær ærlig — dette avgjør om vi lager plan nå, eller tar en prat først.",opts:REDFLAGS},
+  {key:"injuries",type:"text",min:3,kick:"Helse",title:"Skader eller plager?",hint:"Fortell meg det jeg bør vite om. Skriv «ingen» hvis det ikke er noe.",ph:"F.eks. korsryggen murrer hvis jeg løfter slurvete …"},
+  {key:"redflags",type:"multi",kick:"Helse",title:"Gjelder noe av dette deg?",hint:"Vær ærlig med meg — dette avgjør om jeg lager planen nå, eller om vi tar en prat først.",opts:REDFLAGS},
   {key:"technique",type:"chips",kick:"Ferdighet",title:"Hvor trygg er du på frivekter?",opts:["Kan knebøy/markløft/benk trygt","Litt kjennskap til frivekter","Helt fersk på frivekter"]},
-  {key:"history",type:"text",kick:"Vanen",title:"Hva har fått deg til å gi opp før?",hint:"Det vi vet om, kan vi bygge rundt. Skriv «aldri gitt opp» hvis det ikke gjelder.",ph:"F.eks. ble for ambisiøs og brant ut etter tre uker …"},
+  {key:"history",type:"text",min:6,kick:"Vanen",title:"Hva har fått deg til å gi opp før?",hint:"Det jeg vet om, kan jeg bygge rundt. Skriv «aldri gitt opp» hvis det ikke gjelder deg.",ph:"F.eks. ble for ambisiøs og brant ut etter tre uker …"},
   {key:"motivation",type:"chips",kick:"Drivkraft",title:"Hva motiverer deg mest nå?",opts:["Bli sterkere","Bygge muskler","Gå ned i vekt / forbrenne fett","Holde meg frisk","Prestere i idrett"]}
 ];
 
@@ -289,7 +255,7 @@ function render(){
   let h=`<div class="q fadein"><div class="kick">${q.kick}</div><h2>${q.title}</h2>`;
   if(q.hint)h+=`<p class="hint">${q.hint}</p>`;
   if(q.type==="text"){
-    h+=`<div class="ta-wrap"><textarea id="ta" placeholder="${q.ph||""}">${answers[q.key]||""}</textarea></div>`;
+    h+=`<div class="ta-wrap"><textarea id="ta" placeholder="${q.ph||""}">${answers[q.key]||""}</textarea><div class="ta-hint" id="tahint"></div></div>`;
   }else{
     h+=`<div class="chips">`;
     q.opts.forEach(o=>{
@@ -302,7 +268,9 @@ function render(){
   h+=`</div>`;
   $("#qhost").innerHTML=h;
   if(q.type==="text"){
-    const ta=$("#ta");ta.oninput=()=>{answers[q.key]=ta.value.trim();validate();};
+    const ta=$("#ta");
+    ta.oninput=()=>{answers[q.key]=ta.value.trim();updateHint();validate();};
+    updateHint();
     setTimeout(()=>ta.focus(),80);
   }else{
     $("#qhost").querySelectorAll(".chip").forEach(c=>{
@@ -324,9 +292,16 @@ function render(){
   }
   validate();
 }
+function updateHint(){
+  const q=Q[step];if(q.type!=="text")return;
+  const el=$("#tahint");if(!el)return;
+  const len=(answers[q.key]||"").length, min=q.min||1;
+  if(len>=min){el.textContent="✓ takk";el.classList.add("ok");}
+  else{el.textContent="skriv gjerne litt mer …";el.classList.remove("ok");}
+}
 function validate(){
   const q=Q[step];let ok;
-  if(q.type==="text")ok=!!(answers[q.key]&&answers[q.key].length);
+  if(q.type==="text")ok=(answers[q.key]||"").length>=(q.min||1);
   else if(q.type==="multi")ok=!!(answers[q.key]&&answers[q.key].length);
   else ok=!!answers[q.key];
   $("#next").disabled=!ok;
@@ -336,7 +311,7 @@ $("#back").onclick=()=>{if(step>0){step--;render();window.scrollTo({top:0,behavi
 $("#next").onclick=()=>{if($("#next").disabled)return;
   if(step<13){step++;render();window.scrollTo({top:0,behavior:"smooth"});}else generate();};
 
-const LOADMSGS=["Leser svarene dine …","Veier volum mot restitusjon …","Velger øvelser …","Setter progresjonen …","Skriver planen …"];
+const LOADMSGS=["Leser gjennom svarene dine …","Tenker på hva kroppen din tåler …","Velger øvelsene …","Setter opp progresjonen …","Skriver ned planen …"];
 function generate(){
   show("loading");
   let i=0;const lm=$("#loadmsg");
@@ -355,18 +330,19 @@ function demoNote(){return `<div class="demo-note reveal" style="animation-delay
 function renderResult(plan,isMock){
   show("result");window.scrollTo({top:0});
   const r=$("#result");
+  const gen=plan._model?` · skrevet av ${esc(plan._model)}`:"";
   if(plan.mode==="henvisning"){
     const hv=plan.henvisning||{};
     r.innerHTML=`<div class="henv">${isMock?demoNote():""}
-      <div class="r-kick reveal" style="animation-delay:.05s">Vi tar en prat først</div>
-      <h2 class="reveal" style="animation-delay:.12s">La oss snakke før vi lager planen.</h2>
+      <div class="r-kick reveal" style="animation-delay:.05s">La oss ta en prat først</div>
+      <h2 class="reveal" style="animation-delay:.12s">Jeg vil snakke med deg før jeg lager planen.</h2>
       <p class="reveal" style="animation-delay:.2s">${esc(hv.grunn||"")}</p>
       <p class="reveal" style="animation-delay:.28s">${esc(hv.hva_na||"")}</p>
-      <div class="actions reveal" style="animation-delay:.36s"><button class="btn">Book gratis samtale</button></div>
-      <p class="foot reveal" style="animation-delay:.42s">Treningsveiledning, ikke medisinsk behandling.</p></div>`;
+      <div class="actions reveal" style="animation-delay:.36s"><button class="btn">Book en gratis samtale</button></div>
+      <p class="foot reveal" style="animation-delay:.42s">Treningsveiledning, ikke medisinsk behandling.${gen}</p></div>`;
     return;
   }
-  r.innerHTML=planHtml(plan,isMock);
+  r.innerHTML=planHtml(plan,isMock,gen);
   $("#dl").onclick=()=>downloadPdf(plan);
   buildPdfDoc(plan);
 }
@@ -375,11 +351,11 @@ function exRow(e){
     <div class="exnums">${esc(e.sett)}×${esc(e.reps)} · RPE ${esc(e.rpe)} · ${esc(e.hvile)}</div>
     ${e.notat?`<div class="exnote">${esc(e.notat)}</div>`:""}</div>`;
 }
-function planHtml(p,isMock){
+function planHtml(p,isMock,gen){
   let d=0;const del=()=>`style="animation-delay:${(d+=.07).toFixed(2)}s"`;
   return `
   ${isMock?demoNote():""}
-  <div class="r-kick reveal" ${del()}>Din plan</div>
+  <div class="r-kick reveal" ${del()}>Her er planen din</div>
   <div class="r-title reveal" ${del()}>${esc(p.tittel)}</div>
   <div class="speil reveal" ${del()}>${esc(p.speiling)}</div>
   <p class="lead reveal" ${del()}>${esc(p.kort_om)}</p>
@@ -392,18 +368,18 @@ function planHtml(p,isMock){
   ${p.tilpasninger?`<div class="block reveal" ${del()}><div class="lbl">Tilpasset deg</div><p style="color:var(--txt-soft)">${esc(p.tilpasninger)}</p></div>`:""}
   <div class="block reveal" ${del()}><div class="lbl">Ærlig tidslinje</div><p style="color:var(--txt-soft)">${esc(p.tidslinje)}</p></div>
   <div class="block reveal" ${del()}><div class="lbl">Følg med på</div><ul class="track-list">${(p.spor_dette||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-  <div class="first reveal" ${del()}><div class="lbl">Første steg</div><p>${esc(p.forste_steg)}</p></div>
+  <div class="first reveal" ${del()}><div class="lbl">Først av alt</div><p>${esc(p.forste_steg)}</p></div>
   <div class="actions reveal" ${del()}>
     <button class="btn" id="dl">Last ned som PDF</button>
     <button class="btn glass" onclick="location.reload()">Lag en ny</button>
   </div>
   <div class="offer reveal" ${del()}>
-    <h3>Vil du at vi følger deg opp?</h3>
-    <p>Tretti minutter på video i uka med fysioterapeut eller PT. Vi justerer planen mens du går.
+    <h3>Vil du ha noen i hjørnet ditt?</h3>
+    <p>Tretti minutter på video i uka med en fysioterapeut eller PT — et ekte menneske som justerer planen mens du går.
        <span class="free">De to første ukene er gratis</span>, deretter 299 kr/uke. Si opp når du vil.</p>
     <button class="btn">Book de to gratis ukene</button>
   </div>
-  <p class="foot reveal" ${del()}>${esc(p.fotnote||"Treningsveiledning, ikke medisinsk behandling.")}</p>`;
+  <p class="foot reveal" ${del()}>${esc(p.fotnote||"Treningsveiledning, ikke medisinsk behandling.")}${gen||""}</p>`;
 }
 
 function buildPdfDoc(p){
@@ -413,7 +389,7 @@ function buildPdfDoc(p){
       <table><thead><tr><th>Øvelse</th><th>Sett</th><th>Reps</th><th>RPE</th><th>Hvile</th><th>Notat</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }).join("");
   $("#pdfdoc").innerHTML=`<div class="pad">
-    <div class="pb">Settet</div><h1>${esc(p.tittel)}</h1>
+    <div class="pb">Arnold</div><h1>${esc(p.tittel)}</h1>
     <div class="ps">${esc(p.speiling)}</div>
     <p>${esc(p.kort_om)}</p>
     <div class="pl">Uka di</div><p><strong>${esc(p.splitt)}</strong><br>${esc(p.uke_struktur)}</p>
@@ -422,14 +398,14 @@ function buildPdfDoc(p){
     ${p.tilpasninger?`<div class="pl">Tilpasset deg</div><p>${esc(p.tilpasninger)}</p>`:""}
     <div class="pl">Ærlig tidslinje</div><p>${esc(p.tidslinje)}</p>
     <div class="pl">Følg med på</div><ul>${(p.spor_dette||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
-    <div class="pfirst"><div class="pl">Første steg</div><p>${esc(p.forste_steg)}</p></div>
-    <div class="poffer"><strong style="font-family:var(--serif);font-size:17px">Vil du at vi følger deg opp?</strong>
-      <p style="margin-top:6px;color:#5a564d">Tretti minutter på video i uka med fysioterapeut eller PT. To uker gratis, deretter 299 kr/uke. Book på settet.no.</p></div>
-    <div class="pfoot">${esc(p.fotnote||"Treningsveiledning, ikke medisinsk behandling.")} · Settet</div>
+    <div class="pfirst"><div class="pl">Først av alt</div><p>${esc(p.forste_steg)}</p></div>
+    <div class="poffer"><strong style="font-family:var(--serif);font-size:17px">Vil du ha noen i hjørnet ditt?</strong>
+      <p style="margin-top:6px;color:#5a564d">Tretti minutter på video i uka med en fysioterapeut eller PT. De to første ukene er gratis, deretter 299 kr/uke.</p></div>
+    <div class="pfoot">${esc(p.fotnote||"Treningsveiledning, ikke medisinsk behandling.")} · Arnold</div>
   </div>`;
 }
 function downloadPdf(){
-  html2pdf().set({margin:0,filename:"treningsplan-settet.pdf",image:{type:"jpeg",quality:.98},
+  html2pdf().set({margin:0,filename:"treningsplan-arnold.pdf",image:{type:"jpeg",quality:.98},
     html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},
     jsPDF:{unit:"pt",format:"a4",orientation:"portrait"},pagebreak:{mode:["css","legacy"]}
   }).from($("#pdfdoc")).save();
@@ -437,7 +413,7 @@ function downloadPdf(){
 
 const MOCK={
   "mode":"plan",
-  "speiling":"Du har trent lenge nok til å vite hva du gjør, og du vil ha resultater uten at trening eter opp uka. Korsryggen din liker ikke slurv — det styrer ikke planen, men det former hvordan vi setter den opp. Tre korte, tunge økter er nok for målet ditt.",
+  "speiling":"Du har trent lenge nok til å vite hva du gjør, og du vil ha resultater uten at trening eter opp uka. Korsryggen din liker ikke slurv — det styrer ikke planen, men det former hvordan jeg setter den opp. Tre korte, tunge økter er nok for det du vil oppnå.",
   "tittel":"Sterk på tre",
   "kort_om":"Tre helkroppsøkter i uka, bygget rundt få tunge basisløft. Med høyt stress og middels søvn er mindre, men tyngre, riktig vei — du blir sterkere uten å grave deg ned i restitusjonsgjeld.",
   "splitt":"Helkropp — 3 økter i uken",
