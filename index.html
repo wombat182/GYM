@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Settet — treningsplan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root{
+    --paper:#F4F1EA; --paper-2:#EDE9DE; --ink:#1A1916; --ink-soft:#5C574D;
+    --line:#D7D1C2; --accent:#6E2A2A; --accent-soft:#E7DCD4; --ok:#3A5A40;
+    --display:'Fraunces',Georgia,serif; --body:'Newsreader',Georgia,serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+    font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  body{background-image:radial-gradient(circle at 1px 1px,rgba(0,0,0,.02) 1px,transparent 0);background-size:22px 22px}
+  .wrap{max-width:680px;margin:0 auto;padding:0 24px}
+  .label{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)}
+  header.top{padding:28px 0 0}
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:.32em;text-transform:uppercase;font-weight:500}
+  .rule{height:1px;background:var(--line);margin:18px 0 0}
+  button{font-family:var(--mono);cursor:pointer}
+  .btn{background:var(--ink);color:var(--paper);border:none;padding:14px 26px;font-size:12px;
+    letter-spacing:.18em;text-transform:uppercase;transition:transform .15s ease,opacity .15s ease}
+  .btn:hover{transform:translateY(-1px)} .btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn.accent{background:var(--accent)}
+
+  /* INTRO */
+  #intro{min-height:78vh;display:flex;flex-direction:column;justify-content:center}
+  #intro h1{font-family:var(--display);font-weight:500;font-size:clamp(40px,8vw,68px);line-height:1.02;
+    letter-spacing:-.02em;margin:0 0 22px}
+  #intro h1 em{font-style:italic;color:var(--accent)}
+  #intro p.lede{font-size:21px;color:var(--ink-soft);max-width:30ch;margin:0 0 38px}
+  .meta-row{display:flex;gap:28px;flex-wrap:wrap;margin-top:30px}
+  .meta-row div{max-width:18ch} .meta-row .label{display:block;margin-bottom:6px}
+  .meta-row p{margin:0;font-size:15px;color:var(--ink-soft)}
+
+  /* QUIZ */
+  #quiz{display:none;min-height:78vh;padding:40px 0 60px}
+  .progress{display:flex;align-items:center;gap:14px;margin-bottom:42px}
+  .progress .count{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--ink-soft);white-space:nowrap}
+  .bar{flex:1;height:1px;background:var(--line);position:relative}
+  .bar span{position:absolute;left:0;top:0;height:1px;background:var(--accent);transition:width .35s ease}
+  .q{animation:rise .4s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .q .kicker{margin-bottom:14px}
+  .q h2{font-family:var(--display);font-weight:500;font-size:clamp(26px,5vw,38px);line-height:1.12;
+    letter-spacing:-.01em;margin:0 0 8px}
+  .q .hint{color:var(--ink-soft);font-size:16px;margin:0 0 26px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:var(--mono);font-size:13px;letter-spacing:.04em;padding:12px 18px;background:var(--paper-2);
+    border:1px solid var(--line);color:var(--ink);transition:all .14s ease}
+  .chip:hover{border-color:var(--ink)}
+  .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip.danger.on{background:var(--accent);border-color:var(--accent)}
+  textarea{width:100%;min-height:120px;background:transparent;border:none;border-bottom:1.5px solid var(--line);
+    font-family:var(--body);font-size:21px;color:var(--ink);padding:6px 2px 12px;resize:vertical;line-height:1.5}
+  textarea:focus{outline:none;border-bottom-color:var(--accent)}
+  textarea::placeholder{color:#A8A294}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:46px}
+  .back{background:none;border:none;color:var(--ink-soft);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  .back:hover{color:var(--ink)} .back[hidden]{visibility:hidden}
+
+  /* LOADING */
+  #loading{display:none;min-height:78vh;flex-direction:column;justify-content:center;align-items:flex-start}
+  #loading h2{font-family:var(--display);font-weight:500;font-size:34px;margin:0 0 10px}
+  #loading .dots{font-family:var(--mono);color:var(--ink-soft);font-size:14px}
+  .spin{width:30px;height:30px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;
+    animation:sp 0.9s linear infinite;margin-bottom:26px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* RESULT */
+  #result{display:none;padding:40px 0 80px}
+  .demo-note{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);
+    border:1px solid var(--accent-soft);background:var(--accent-soft);padding:8px 12px;margin-bottom:26px;display:inline-block}
+  .plan-title{font-family:var(--display);font-weight:500;font-size:clamp(30px,6vw,46px);line-height:1.05;
+    letter-spacing:-.02em;margin:6px 0 20px}
+  .speiling{font-size:20px;font-style:italic;color:var(--ink);border-left:2px solid var(--accent);
+    padding-left:18px;margin:0 0 30px;line-height:1.5}
+  .sec{margin:30px 0}
+  .sec .label{display:block;margin-bottom:10px}
+  .sec p{margin:.2em 0}
+  .okt{border-top:1px solid var(--line);padding:22px 0 6px;page-break-inside:avoid}
+  .okt h3{font-family:var(--display);font-weight:500;font-size:22px;margin:0 0 2px}
+  .okt .fokus{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);
+    text-align:left;font-weight:400;padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+  td{padding:9px 10px 9px 0;border-bottom:1px solid var(--paper-2);vertical-align:top}
+  td.ex{font-family:var(--body);font-size:16px} td.num{font-family:var(--mono);font-size:13px;white-space:nowrap}
+  td.note{font-size:13px;color:var(--ink-soft)}
+  .first-step{background:var(--ink);color:var(--paper);padding:22px 24px;margin:34px 0}
+  .first-step .label{color:#B7B0A1;display:block;margin-bottom:8px}
+  .first-step p{margin:0;font-size:18px}
+  ul.track{margin:8px 0 0;padding-left:18px} ul.track li{margin:3px 0}
+  .offer{border:1px solid var(--line);padding:26px 24px;margin:38px 0 0;background:var(--paper-2)}
+  .offer h3{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 8px}
+  .offer p{margin:0 0 18px;color:var(--ink-soft)}
+  .offer .price{font-family:var(--mono);color:var(--ink)}
+  .foot{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-soft);margin-top:40px}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin:34px 0}
+
+  /* HENVISNING */
+  .henv{padding:8px 0}
+  .henv h2{font-family:var(--display);font-weight:500;font-size:34px;margin:0 0 16px}
+  .henv p{font-size:19px;max-width:46ch}
+
+  footer{padding:40px 0 50px;text-align:center}
+  footer .label{opacity:.7}
+
+  /* PDF document (offscreen) */
+  #pdfdoc{position:absolute;left:-9999px;top:0;width:794px;background:#fff;color:#1A1916;font-family:var(--body)}
+  #pdfdoc .pad{padding:54px 60px}
+  #pdfdoc .pbrand{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#6E2A2A}
+  #pdfdoc h1{font-family:var(--display);font-weight:600;font-size:34px;line-height:1.05;margin:10px 0 18px}
+  #pdfdoc .pspeil{font-style:italic;font-size:16px;border-left:2px solid #6E2A2A;padding-left:14px;margin:0 0 22px}
+  #pdfdoc .plabel{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7a766c;margin:22px 0 8px}
+  #pdfdoc table{font-size:13px} #pdfdoc th{font-size:9px}
+  #pdfdoc .pfirst{background:#1A1916;color:#fff;padding:18px 20px;margin:22px 0}
+  #pdfdoc .pfirst .plabel{color:#bdb6a6;margin-top:0}
+  #pdfdoc .poffer{border:1px solid #D7D1C2;padding:20px;margin-top:24px}
+  #pdfdoc .pfoot{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:#7a766c;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Settet</div>
+    <div class="rule"></div>
+  </header>
+
+  <!-- INTRO -->
+  <section id="intro">
+    <h1>En treningsplan som er <em>din</em>, ikke en mal.</h1>
+    <p class="lede">Svar på fjorten spørsmål. Få planen som PDF med en gang.</p>
+    <button class="btn" id="start">Lag planen min — 99 kr</button>
+    <div class="meta-row">
+      <div><span class="label">Laget av</span><p>Autorisert fysioterapeut og personlig trener.</p></div>
+      <div><span class="label">Etterpå</span><p>Ukentlig oppfølging på video. To uker gratis.</p></div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="progress">
+      <span class="count" id="count">01 / 14</span>
+      <div class="bar"><span id="barfill" style="width:7%"></span></div>
+    </div>
+    <div id="qhost"></div>
+    <div class="nav">
+      <button class="back" id="back" hidden>← Tilbake</button>
+      <button class="btn" id="next" disabled>Neste</button>
+    </div>
+  </section>
+
+  <!-- LOADING -->
+  <section id="loading">
+    <div class="spin"></div>
+    <h2>Setter sammen planen din</h2>
+    <div class="dots" id="loadmsg">Leser svarene dine …</div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result"></section>
+</div>
+
+<footer><div class="wrap"><span class="label">Settet · demo</span></div></footer>
+
+<!-- offscreen PDF target -->
+<div id="pdfdoc"></div>
+
+<script>
+/* ---------- spørsmål ---------- */
+const REDFLAGS = [
+  "Brystsmerter eller trykk ved anstrengelse",
+  "Svimmelhet eller besvimelse",
+  "Kjent hjerte-, kar- eller lungesykdom",
+  "Operasjon eller alvorlig skade siste 3 mnd",
+  "Graviditet med komplikasjoner",
+  "Nummenhet, utstråling eller kraftsvikt",
+  "Ingen av disse"
+];
+const Q = [
+  {key:"goal",type:"text",kicker:"Målet",title:"Hva vil du oppnå?",hint:"Skriv det med egne ord — det former hele planen.",ph:"F.eks. bli sterkere uten å bruke livet i gymmet …"},
+  {key:"experience",type:"chips",kicker:"Erfaring",title:"Hvor lenge har du trent?",opts:["Nybegynner (under 1 år)","Litt erfaren (1–3 år)","Erfaren (3+ år)"]},
+  {key:"days",type:"chips",kicker:"Tid",title:"Hvor mange dager i uka?",opts:["2","3","4","5","6"]},
+  {key:"time",type:"chips",kicker:"Tid",title:"Hvor lenge per økt?",opts:["30 min","45 min","60 min","75+ min"]},
+  {key:"equipment",type:"chips",kicker:"Sted",title:"Hvor trener du?",opts:["Fullt utstyrt gym","Hjemmegym med vekter","Kun kroppsvekt","Annet"]},
+  {key:"sex",type:"chips",kicker:"Deg",title:"Kjønn?",opts:["Mann","Kvinne","Annet / vil ikke si"]},
+  {key:"age",type:"chips",kicker:"Deg",title:"Alder?",opts:["Under 20","20–29","30–39","40–49","50–59","60+"]},
+  {key:"sleep",type:"chips",kicker:"Restitusjon",title:"Hvordan sover du?",hint:"Avgjør hvor mye trening kroppen din faktisk tåler.",opts:["Dårlig","Middels","God"]},
+  {key:"stress",type:"chips",kicker:"Restitusjon",title:"Stressnivå i hverdagen?",opts:["Lavt","Middels","Høyt"]},
+  {key:"injuries",type:"text",kicker:"Helse",title:"Skader eller plager?",hint:"Beskriv det vi bør vite om. Skriv «ingen» hvis ingenting.",ph:"F.eks. korsryggen murrer hvis jeg løfter slurvete …"},
+  {key:"redflags",type:"multi",kicker:"Helse",title:"Gjelder noe av dette deg?",hint:"Vær ærlig — dette avgjør om vi lager plan nå, eller tar en prat først.",opts:REDFLAGS},
+  {key:"technique",type:"chips",kicker:"Ferdighet",title:"Hvor trygg er du på frivekter?",opts:["Kan knebøy/markløft/benk trygt","Litt kjennskap til frivekter","Helt fersk på frivekter"]},
+  {key:"history",type:"text",kicker:"Vanen",title:"Hva har fått deg til å gi opp før?",hint:"Det vi vet om, kan vi bygge rundt. Skriv «aldri gitt opp» hvis det ikke gjelder.",ph:"F.eks. ble for ambisiøs og brant ut etter tre uker …"},
+  {key:"motivation",type:"chips",kicker:"Drivkraft",title:"Hva motiverer deg mest nå?",opts:["Bli sterkere","Bygge muskler","Gå ned i vekt / forbrenne fett","Holde meg frisk","Prestere i idrett"]}
+];
+
+const answers = {};
+let step = 0;
+
+const $ = s => document.querySelector(s);
+const FLEX = {intro:1, loading:1};
+const show = id => ["intro","quiz","loading","result"].forEach(s=>{ $("#"+s).style.display = (s===id) ? (FLEX[s]?"flex":"block") : "none"; });
+
+$("#start").onclick = () => { show("quiz"); render(); };
+
+function render(){
+  const q = Q[step];
+  $("#count").textContent = String(step+1).padStart(2,"0")+" / 14";
+  $("#barfill").style.width = Math.round(((step+1)/14)*100)+"%";
+  $("#back").hidden = step===0;
+  const host = $("#qhost");
+  let inner = `<div class="q"><div class="kicker label">${q.kicker}</div><h2>${q.title}</h2>`;
+  if(q.hint) inner += `<p class="hint">${q.hint}</p>`;
+  if(q.type==="text"){
+    inner += `<textarea id="ta" placeholder="${q.ph||""}">${answers[q.key]||""}</textarea>`;
+  } else {
+    inner += `<div class="chips">`;
+    q.opts.forEach((o,i)=>{
+      const danger = q.type==="multi" && o!=="Ingen av disse";
+      const sel = q.type==="multi"
+        ? (answers[q.key]||[]).includes(o)
+        : answers[q.key]===o;
+      inner += `<button class="chip${danger?' danger':''}${sel?' on':''}" data-v="${o}">${o}</button>`;
+    });
+    inner += `</div>`;
+  }
+  inner += `</div>`;
+  host.innerHTML = inner;
+
+  if(q.type==="text"){
+    const ta = $("#ta");
+    ta.oninput = ()=>{ answers[q.key]=ta.value.trim(); validate(); };
+    setTimeout(()=>ta.focus(),60);
+  } else {
+    host.querySelectorAll(".chip").forEach(c=>{
+      c.onclick = ()=>{
+        const v=c.dataset.v;
+        if(q.type==="multi"){
+          let arr = answers[q.key]||[];
+          if(v==="Ingen av disse"){ arr = arr.includes(v)?[]:["Ingen av disse"]; }
+          else { arr = arr.filter(x=>x!=="Ingen av disse");
+                 arr = arr.includes(v)?arr.filter(x=>x!==v):[...arr,v]; }
+          answers[q.key]=arr;
+          host.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",(answers[q.key]||[]).includes(x.dataset.v)));
+        } else {
+          answers[q.key]=v;
+          host.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x.dataset.v===v));
+        }
+        validate();
+      };
+    });
+  }
+  validate();
+}
+
+function validate(){
+  const q=Q[step];
+  let ok;
+  if(q.type==="text") ok = !!(answers[q.key]&&answers[q.key].length);
+  else if(q.type==="multi") ok = !!(answers[q.key]&&answers[q.key].length);
+  else ok = !!answers[q.key];
+  $("#next").disabled = !ok;
+  $("#next").textContent = step===13 ? "Lag planen" : "Neste";
+}
+
+$("#back").onclick = ()=>{ if(step>0){step--;render();window.scrollTo(0,0);} };
+$("#next").onclick = ()=>{ if($("#next").disabled) return;
+  if(step<13){ step++; render(); window.scrollTo(0,0); }
+  else generate();
+};
+
+/* ---------- generering ---------- */
+const LOADMSGS=["Leser svarene dine …","Veier volum mot restitusjon …","Velger øvelser …","Setter progresjonen …"];
+function generate(){
+  show("loading");
+  let i=0; const t=setInterval(()=>{ i=(i+1)%LOADMSGS.length; $("#loadmsg").textContent=LOADMSGS[i]; },1400);
+  callApi().then(plan=>{ clearInterval(t); renderResult(plan,false); })
+    .catch(()=>{ clearInterval(t); renderResult(MOCK,true); });
+}
+
+async function callApi(){
+  const r = await fetch("/api/plan",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(answers)});
+  if(!r.ok) throw new Error("api");
+  return await r.json();
+}
+
+/* ---------- resultat ---------- */
+function esc(s){return (s==null?"":String(s)).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+function renderResult(plan,isMock){
+  show("result");
+  window.scrollTo(0,0);
+  const r=$("#result");
+  if(plan.mode==="henvisning"){
+    const h=plan.henvisning||{};
+    r.innerHTML = `<div class="henv">
+      ${isMock?demoNote():""}
+      <div class="label">Vi tar en prat først</div>
+      <h2>La oss snakke før vi lager planen.</h2>
+      <p>${esc(h.grunn||"")}</p>
+      <p style="margin-top:14px">${esc(h.hva_na||"")}</p>
+      <div class="actions"><button class="btn accent">Book gratis samtale</button></div>
+      <p class="foot">Treningsveiledning, ikke medisinsk behandling.</p>
+    </div>`;
+    return;
+  }
+  r.innerHTML = planHtml(plan,isMock);
+  $("#dl").onclick = ()=>downloadPdf(plan);
+  buildPdfDoc(plan);
+}
+
+function demoNote(){return `<div class="demo-note">Demo-modus — ingen backend tilkoblet. Viser eksempelplan.</div>`;}
+
+function oktTable(o){
+  const rows=(o.ovelser||[]).map(e=>`<tr>
+    <td class="ex">${esc(e.ovelse)}</td><td class="num">${esc(e.sett)}</td>
+    <td class="num">${esc(e.reps)}</td><td class="num">${esc(e.rpe)}</td>
+    <td class="num">${esc(e.hvile)}</td><td class="note">${esc(e.notat||"")}</td></tr>`).join("");
+  return `<div class="okt"><h3>${esc(o.navn)}</h3><p class="fokus">${esc(o.fokus||"")}</p>
+    <table><thead><tr><th>Øvelse</th><th>Sett</th><th>Reps</th><th>RPE</th><th>Hvile</th><th>Notat</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+
+function planHtml(p,isMock){
+  return `
+  ${isMock?demoNote():""}
+  <div class="label">Din plan</div>
+  <div class="plan-title">${esc(p.tittel)}</div>
+  <div class="speiling">${esc(p.speiling)}</div>
+  <div class="sec"><p>${esc(p.kort_om)}</p></div>
+  <div class="sec"><span class="label">Uka di</span><p><strong>${esc(p.splitt)}</strong></p><p>${esc(p.uke_struktur)}</p></div>
+  ${(p.okter||[]).map(oktTable).join("")}
+  <div class="sec"><span class="label">Progresjon</span><p>${esc(p.progresjon)}</p></div>
+  ${p.tilpasninger?`<div class="sec"><span class="label">Tilpasset deg</span><p>${esc(p.tilpasninger)}</p></div>`:""}
+  <div class="sec"><span class="label">Ærlig tidslinje</span><p>${esc(p.tidslinje)}</p></div>
+  <div class="sec"><span class="label">Følg med på</span><ul class="track">${(p.spor_dette||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+  <div class="first-step"><span class="label">Første steg</span><p>${esc(p.forste_steg)}</p></div>
+  <div class="actions">
+    <button class="btn" id="dl">Last ned som PDF</button>
+    <button class="btn ghost" onclick="location.reload()">Lag en ny</button>
+  </div>
+  <div class="offer">
+    <h3>Vil du at vi følger deg opp?</h3>
+    <p>Tretti minutter på video i uka med fysioterapeut eller PT. Vi justerer planen mens du går. <span class="price">De to første ukene er gratis, deretter 299 kr/uke. Si opp når du vil.</span></p>
+    <button class="btn accent">Book de to gratis ukene</button>
+  </div>
+  <p class="foot">${esc(p.fotnote||"Treningsveiledning, ikke medisinsk behandling.")}</p>`;
+}
+
+/* ---------- PDF ---------- */
+function buildPdfDoc(p){
+  const okter=(p.okter||[]).map(o=>{
+    const rows=(o.ovelser||[]).map(e=>`<tr>
+      <td class="ex">${esc(e.ovelse)}</td><td class="num">${esc(e.sett)}</td><td class="num">${esc(e.reps)}</td>
+      <td class="num">${esc(e.rpe)}</td><td class="num">${esc(e.hvile)}</td><td class="note">${esc(e.notat||"")}</td></tr>`).join("");
+    return `<div class="okt"><h3 style="font-family:var(--display);font-weight:600;font-size:18px;margin:18px 0 2px">${esc(o.navn)}</h3>
+      <p style="font-size:12px;color:#7a766c;margin:0 0 8px">${esc(o.fokus||"")}</p>
+      <table><thead><tr><th>Øvelse</th><th>Sett</th><th>Reps</th><th>RPE</th><th>Hvile</th><th>Notat</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`;
+  }).join("");
+  $("#pdfdoc").innerHTML=`<div class="pad">
+    <div class="pbrand">Settet</div>
+    <h1>${esc(p.tittel)}</h1>
+    <div class="pspeil">${esc(p.speiling)}</div>
+    <p style="font-size:14px">${esc(p.kort_om)}</p>
+    <div class="plabel">Uka di</div>
+    <p style="font-size:14px;margin:0"><strong>${esc(p.splitt)}</strong><br>${esc(p.uke_struktur)}</p>
+    ${okter}
+    <div class="plabel">Progresjon</div><p style="font-size:13px;margin:0">${esc(p.progresjon)}</p>
+    ${p.tilpasninger?`<div class="plabel">Tilpasset deg</div><p style="font-size:13px;margin:0">${esc(p.tilpasninger)}</p>`:""}
+    <div class="plabel">Ærlig tidslinje</div><p style="font-size:13px;margin:0">${esc(p.tidslinje)}</p>
+    <div class="plabel">Følg med på</div><ul style="font-size:13px;margin:4px 0 0;padding-left:16px">${(p.spor_dette||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+    <div class="pfirst"><div class="plabel">Første steg</div><p style="margin:0;font-size:14px">${esc(p.forste_steg)}</p></div>
+    <div class="poffer"><strong style="font-family:var(--display);font-size:16px">Vil du at vi følger deg opp?</strong>
+      <p style="font-size:13px;color:#5C574D;margin:6px 0 0">Tretti minutter på video i uka med fysioterapeut eller PT. To uker gratis, deretter 299 kr/uke. Book på settet.no.</p></div>
+    <div class="pfoot">${esc(p.fotnote||"Treningsveiledning, ikke medisinsk behandling.")} · Settet</div>
+  </div>`;
+}
+
+function downloadPdf(p){
+  const node=$("#pdfdoc");
+  html2pdf().set({
+    margin:0, filename:"treningsplan-settet.pdf",
+    image:{type:"jpeg",quality:0.98},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},
+    jsPDF:{unit:"pt",format:"a4",orientation:"portrait"},
+    pagebreak:{mode:["css","legacy"]}
+  }).from(node).save();
+}
+
+/* ---------- mock (brukes når ingen backend) ---------- */
+const MOCK = {
+  "mode":"plan",
+  "speiling":"Du har trent lenge nok til å vite hva du gjør, og du vil ha resultater uten at trening eter opp uka. Korsryggen din liker ikke slurv — det styrer ikke planen, men det former hvordan vi setter den opp. Tre korte, tunge økter er nok for målet ditt.",
+  "tittel":"Sterk på tre — helkropp for travle uker",
+  "kort_om":"Tre helkroppsøkter i uka, bygget rundt få tunge basisløft. Med høyt stress og middels søvn er mindre, men tyngre, riktig vei — du blir sterkere uten å grave deg ned i restitusjonsgjeld.",
+  "splitt":"Helkropp — 3 økter i uken",
+  "uke_struktur":"Tre økter med minst én dags mellomrom, f.eks. man/ons/fre. Rekkefølgen er fleksibel; ikke to harde dager på rad.",
+  "okter":[
+    {"navn":"Økt A","fokus":"Knebøymønster + press","ovelser":[
+      {"ovelse":"Knebøy","sett":"3","reps":"5","rpe":"8","hvile":"2–3 min","notat":"Spent kjerne, kontrollert bunn."},
+      {"ovelse":"Benkpress","sett":"3","reps":"6","rpe":"8","hvile":"2–3 min","notat":""},
+      {"ovelse":"Nedtrekk","sett":"3","reps":"10","rpe":"9","hvile":"90 sek","notat":""}]},
+    {"navn":"Økt B","fokus":"Hoftehengsel (rygg-vennlig) + drag","ovelser":[
+      {"ovelse":"Rumensk markløft","sett":"3","reps":"5","rpe":"7","hvile":"3 min","notat":"Nøytral rygg; stopp hvis formen ryker."},
+      {"ovelse":"Stående skulderpress","sett":"3","reps":"6","rpe":"8","hvile":"2 min","notat":""},
+      {"ovelse":"Stående roing","sett":"3","reps":"8","rpe":"8","hvile":"90 sek","notat":""}]},
+    {"navn":"Økt C","fokus":"Bein-variant + overkropp","ovelser":[
+      {"ovelse":"Frontbøy eller beinpress","sett":"3","reps":"8","rpe":"8","hvile":"2 min","notat":"Beinpress hvis ryggen er sliten."},
+      {"ovelse":"Skråbenk med manualer","sett":"3","reps":"8","rpe":"8","hvile":"2 min","notat":""},
+      {"ovelse":"Ansiktsdrag + bicepscurl","sett":"2","reps":"12","rpe":"9","hvile":"60 sek","notat":"Superset, rask avslutning."}]}
+  ],
+  "progresjon":"Dobbel progresjon: klarer du øvre ende av rep-området på alle sett med riktig RPE, øk vekten neste gang (2,5–5 kg på basisløft). Hver 6.–8. uke: en lettere uke med ~2/3 av vektene. Ved høyt stress: bli en uke til på samme vekt heller enn å presse.",
+  "tilpasninger":"Korsryggen styrer hoftehengselet: rumensk markløft med moderat RPE, og du stopper settet idet formen begynner å ryke — ikke ved tellingen. Frontbøy er ryggvennligere enn knebøy de dagene ryggen er sliten.",
+  "tidslinje":"De første 4 ukene handler om teknikk og å finne riktige vekter — ikke jag rekorder ennå. Uke 4–8 begynner vektene å krype oppover jevnt. Etter 12 uker skal de tunge løftene være merkbart sterkere. Som erfaren kommer fremgangen saktere enn før, og det er som det skal.",
+  "spor_dette":["Vekt × reps på de tre basisløftene","RPE på siste sett","Om korsryggen er rolig dagen etter"],
+  "forste_steg":"Legg Økt A inn i kalenderen for førstkommende ledige dag, og pakk gymbagen i kveld. Første økt: bare finn en vekt på knebøy som føles som RPE 7. Ikke mer.",
+  "fotnote":"Treningsveiledning, ikke medisinsk behandling."
+};
+</script>
+</body>
+</html>
