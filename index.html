@@ -141,6 +141,27 @@
   footer{position:relative;z-index:2;text-align:center;padding:30px 0 40px}
   footer span{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--txt-dim)}
 
+  /* glossary + per-exercise how-to */
+  details{margin:0}
+  summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ember);display:inline-flex;align-items:center;gap:7px;padding:3px 0;transition:color .25s}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"↓";font-size:11px;transition:transform .3s}
+  details[open] summary::after{transform:rotate(180deg)}
+  summary:hover{color:#FFB07A}
+  .gloss{background:var(--glass);border:1px solid var(--stroke);border-radius:22px;padding:22px 26px;margin:18px 0;backdrop-filter:blur(14px)}
+  .gloss>summary{font-size:13px;color:var(--txt)}
+  .gbody{margin-top:18px;display:flex;flex-direction:column;gap:15px}
+  .gterm{display:grid;grid-template-columns:108px 1fr;gap:14px;align-items:start;margin:0}
+  @media(max-width:520px){.gterm{grid-template-columns:1fr;gap:3px}}
+  .gterm dt{font-weight:600;color:var(--txt)}
+  .gterm dd{color:var(--txt-soft);font-size:15px;line-height:1.45;margin:0}
+  .rpebar{display:flex;gap:3px;margin-top:9px;max-width:240px}
+  .rpebar span{flex:1;height:7px;border-radius:2px;background:var(--glass-2)}
+  .rpebar span.f{background:linear-gradient(90deg,var(--ember),#FFB07A)}
+  .exhow{grid-column:1/-1;margin-top:9px}
+  .exhow>summary{font-size:10px}
+  .exhow p{margin-top:8px;color:var(--txt-soft);font-size:15px;line-height:1.5;max-width:62ch}
+
   #pdfdoc{position:absolute;left:-9999px;top:0;width:794px;background:#fff;color:#15140F;font-family:var(--ui)}
   #pdfdoc .pad{padding:56px 60px}
   #pdfdoc .pb{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#FF5A38}
@@ -162,6 +183,14 @@
   #pdfdoc .poffer{border:1px solid #e7e2d6;border-radius:12px;padding:20px;margin-top:22px}
   #pdfdoc .pfoot{font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:#9a958a;margin-top:28px}
   #pdfdoc ul{margin:6px 0 0;padding-left:18px}#pdfdoc li{font-size:13px;color:#3a382f;margin:3px 0}
+  #pdfdoc .pleg{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:#9a958a;margin-top:10px}
+  #pdfdoc .pex{padding:10px 0;border-bottom:1px solid #f2eee4}
+  #pdfdoc .pex:last-child{border-bottom:none}
+  #pdfdoc .pexhead{display:flex;justify-content:space-between;gap:14px;align-items:baseline}
+  #pdfdoc .pexname{font-size:15px;font-weight:600;color:#15140F}
+  #pdfdoc .pexnums{font-family:var(--mono);font-size:11px;color:#FF5A38;white-space:nowrap}
+  #pdfdoc .pexslik{font-size:12px;color:#5a564d;margin-top:4px;line-height:1.45}
+  #pdfdoc .pexnote{font-size:11px;color:#8a857a;margin-top:2px;font-style:italic}
 </style>
 </head>
 <body>
@@ -349,7 +378,21 @@ function renderResult(plan,isMock){
 function exRow(e){
   return `<div class="exrow"><div class="exname">${esc(e.ovelse)}</div>
     <div class="exnums">${esc(e.sett)}×${esc(e.reps)} · RPE ${esc(e.rpe)} · ${esc(e.hvile)}</div>
-    ${e.notat?`<div class="exnote">${esc(e.notat)}</div>`:""}</div>`;
+    ${e.notat?`<div class="exnote">${esc(e.notat)}</div>`:""}
+    ${e.slik?`<details class="exhow"><summary>Slik gjør du</summary><p>${esc(e.slik)}</p></details>`:""}
+  </div>`;
+}
+function glossaryBlock(){
+  const rpe=Array.from({length:10},(_,i)=>`<span class="${i<8?"f":""}"></span>`).join("");
+  return `<details class="gloss"><summary>Hva betyr sett, reps og RPE?</summary>
+    <div class="gbody">
+      <dl class="gterm"><dt>Sett</dt><dd>Én runde av en øvelse. «3 sett» betyr at du gjør øvelsen tre ganger, med pause mellom.</dd></dl>
+      <dl class="gterm"><dt>Reps</dt><dd>Antall ganger du gjentar bevegelsen i ett sett. «5 reps» = fem løft på rad.</dd></dl>
+      <dl class="gterm"><dt>RPE</dt><dd>Hvor hardt det føles, fra 1 til 10. RPE 8 betyr at du har omtrent 2 reps igjen før du ikke klarer flere.<div class="rpebar">${rpe}</div></dd></dl>
+      <dl class="gterm"><dt>Hvile</dt><dd>Pausen mellom hvert sett, så du er klar til neste.</dd></dl>
+      <dl class="gterm"><dt>Progresjon</dt><dd>Hvordan planen blir litt tyngre over tid. Det er det som faktisk gir fremgang.</dd></dl>
+      <dl class="gterm"><dt>Deload</dt><dd>En lettere uke innimellom, så kroppen får hentet seg inn før du presser videre.</dd></dl>
+    </div></details>`;
 }
 function planHtml(p,isMock,gen){
   let d=0;const del=()=>`style="animation-delay:${(d+=.07).toFixed(2)}s"`;
@@ -359,6 +402,7 @@ function planHtml(p,isMock,gen){
   <div class="r-title reveal" ${del()}>${esc(p.tittel)}</div>
   <div class="speil reveal" ${del()}>${esc(p.speiling)}</div>
   <p class="lead reveal" ${del()}>${esc(p.kort_om)}</p>
+  <div class="reveal" ${del()}>${glossaryBlock()}</div>
   <div class="block week reveal" ${del()}><div class="lbl">Uka di</div>
     <p style="margin-bottom:6px"><strong>${esc(p.splitt)}</strong></p><p style="color:var(--txt-soft)">${esc(p.uke_struktur)}</p></div>
   <div class="block reveal" ${del()}>
@@ -384,14 +428,17 @@ function planHtml(p,isMock,gen){
 
 function buildPdfDoc(p){
   const okter=(p.okter||[]).map(o=>{
-    const rows=(o.ovelser||[]).map(e=>`<tr><td>${esc(e.ovelse)}</td><td class="n">${esc(e.sett)}</td><td class="n">${esc(e.reps)}</td><td class="n">${esc(e.rpe)}</td><td class="n">${esc(e.hvile)}</td><td class="nt">${esc(e.notat||"")}</td></tr>`).join("");
-    return `<div class="pokt"><h3>${esc(o.navn)}</h3><div class="pf">${esc(o.fokus||"")}</div>
-      <table><thead><tr><th>Øvelse</th><th>Sett</th><th>Reps</th><th>RPE</th><th>Hvile</th><th>Notat</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    const rows=(o.ovelser||[]).map(e=>`<div class="pex">
+      <div class="pexhead"><span class="pexname">${esc(e.ovelse)}</span><span class="pexnums">${esc(e.sett)}×${esc(e.reps)} · RPE ${esc(e.rpe)} · ${esc(e.hvile)}</span></div>
+      ${e.slik?`<div class="pexslik">${esc(e.slik)}</div>`:""}
+      ${e.notat?`<div class="pexnote">${esc(e.notat)}</div>`:""}</div>`).join("");
+    return `<div class="pokt"><h3>${esc(o.navn)}</h3><div class="pf">${esc(o.fokus||"")}</div>${rows}</div>`;
   }).join("");
   $("#pdfdoc").innerHTML=`<div class="pad">
     <div class="pb">Arnold</div><h1>${esc(p.tittel)}</h1>
     <div class="ps">${esc(p.speiling)}</div>
     <p>${esc(p.kort_om)}</p>
+    <div class="pleg">Slik leser du tabellen:&nbsp; sett × reps&nbsp;·&nbsp; RPE = hvor hardt det føles (1–10; 8 ≈ 2 reps igjen)&nbsp;·&nbsp; hvile mellom sett</div>
     <div class="pl">Uka di</div><p><strong>${esc(p.splitt)}</strong><br>${esc(p.uke_struktur)}</p>
     ${okter}
     <div class="pl">Progresjon</div><p>${esc(p.progresjon)}</p>
@@ -404,11 +451,23 @@ function buildPdfDoc(p){
     <div class="pfoot">${esc(p.fotnote||"Treningsveiledning, ikke medisinsk behandling.")} · Arnold</div>
   </div>`;
 }
-function downloadPdf(){
-  html2pdf().set({margin:0,filename:"treningsplan-arnold.pdf",image:{type:"jpeg",quality:.98},
-    html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},
-    jsPDF:{unit:"pt",format:"a4",orientation:"portrait"},pagebreak:{mode:["css","legacy"]}
-  }).from($("#pdfdoc")).save();
+async function downloadPdf(){
+  const node=$("#pdfdoc");
+  const ov=document.createElement("div");
+  ov.style.cssText="position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:var(--txt-soft)";
+  ov.textContent="Lager PDF …";
+  document.body.appendChild(ov);
+  try{ if(document.fonts&&document.fonts.ready) await document.fonts.ready; }catch(e){}
+  node.style.left="0";node.style.top="0";node.style.zIndex="90000";
+  const restore=()=>{node.style.left="-9999px";node.style.top="0";node.style.zIndex="";if(ov.parentNode)ov.parentNode.removeChild(ov);};
+  try{
+    await html2pdf().set({margin:0,filename:"treningsplan-arnold.pdf",
+      image:{type:"jpeg",quality:.98},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff",windowWidth:900},
+      jsPDF:{unit:"pt",format:"a4",orientation:"portrait"},pagebreak:{mode:["css","legacy"]}
+    }).from(node).save();
+  }catch(e){console.error("PDF-feil:",e);}
+  setTimeout(restore,300);
 }
 
 const MOCK={
@@ -420,17 +479,17 @@ const MOCK={
   "uke_struktur":"Tre økter med minst én dags mellomrom, f.eks. man/ons/fre. Rekkefølgen er fleksibel; ikke to harde dager på rad.",
   "okter":[
     {"navn":"Økt A","fokus":"Knebøymønster + press","ovelser":[
-      {"ovelse":"Knebøy","sett":"3","reps":"5","rpe":"8","hvile":"2–3 min","notat":"Spent kjerne, kontrollert bunn."},
-      {"ovelse":"Benkpress","sett":"3","reps":"6","rpe":"8","hvile":"2–3 min","notat":""},
-      {"ovelse":"Nedtrekk","sett":"3","reps":"10","rpe":"9","hvile":"90 sek","notat":""}]},
+      {"ovelse":"Knebøy","sett":"3","reps":"5","rpe":"8","hvile":"2–3 min","notat":"Spent kjerne, kontrollert bunn.","slik":"Stang på øvre del av ryggen, føttene litt bredere enn hoftene. Sett deg ned som på en stol til lårene er omtrent vannrette, og press opp igjen. Hold brystet oppe og knærne pekende samme vei som tærne."},
+      {"ovelse":"Benkpress","sett":"3","reps":"6","rpe":"8","hvile":"2–3 min","notat":"","slik":"Ligg på benken, grep litt bredere enn skuldrene. Senk stangen rolig til midt på brystet, og press rett opp. Hold føttene i gulvet og skulderbladene klemt sammen."},
+      {"ovelse":"Nedtrekk","sett":"3","reps":"10","rpe":"9","hvile":"90 sek","notat":"","slik":"Sitt ved kabelmaskinen, grep litt bredere enn skuldrene. Dra stangen ned mot øvre del av brystet ved å trekke albuene ned og bak. Slipp rolig opp igjen — ikke la vekten rykke deg."}]},
     {"navn":"Økt B","fokus":"Hoftehengsel (rygg-vennlig) + drag","ovelser":[
-      {"ovelse":"Rumensk markløft","sett":"3","reps":"5","rpe":"7","hvile":"3 min","notat":"Nøytral rygg; stopp hvis formen ryker."},
-      {"ovelse":"Stående skulderpress","sett":"3","reps":"6","rpe":"8","hvile":"2 min","notat":""},
-      {"ovelse":"Stående roing","sett":"3","reps":"8","rpe":"8","hvile":"90 sek","notat":""}]},
+      {"ovelse":"Rumensk markløft","sett":"3","reps":"5","rpe":"7","hvile":"3 min","notat":"Nøytral rygg; stopp hvis formen ryker.","slik":"Stå med stangen foran lårene. Skyv rumpa bakover og senk stangen langs beina med nesten strake (men ikke låste) knær, til du kjenner det strekke i baksiden av lårene. Press hoftene fram for å reise deg. Ryggen holdes rett hele veien."},
+      {"ovelse":"Stående skulderpress","sett":"3","reps":"6","rpe":"8","hvile":"2 min","notat":"","slik":"Stå med stang eller manualer i skulderhøyde. Press rett opp til armene er strake over hodet, uten å svaie i ryggen. Senk rolig tilbake til skuldrene."},
+      {"ovelse":"Stående roing","sett":"3","reps":"8","rpe":"8","hvile":"90 sek","notat":"","slik":"Bøy litt fram i hoftene med rett rygg, stang eller manualer hengende. Dra vekten inn mot magen ved å trekke albuene bakover, klem skulderbladene sammen, og senk rolig."}]},
     {"navn":"Økt C","fokus":"Bein-variant + overkropp","ovelser":[
-      {"ovelse":"Frontbøy eller beinpress","sett":"3","reps":"8","rpe":"8","hvile":"2 min","notat":"Beinpress hvis ryggen er sliten."},
-      {"ovelse":"Skråbenk med manualer","sett":"3","reps":"8","rpe":"8","hvile":"2 min","notat":""},
-      {"ovelse":"Ansiktsdrag + bicepscurl","sett":"2","reps":"12","rpe":"9","hvile":"60 sek","notat":"Superset, rask avslutning."}]}
+      {"ovelse":"Frontbøy eller beinpress","sett":"3","reps":"8","rpe":"8","hvile":"2 min","notat":"Beinpress hvis ryggen er sliten.","slik":"Frontbøy: stang hvilende foran på skuldrene, albuene høyt, sett deg ned og opp som i vanlig knebøy. Beinpress: sitt i maskinen og press plata vekk med føttene til nesten strake bein, uten å låse knærne hardt."},
+      {"ovelse":"Skråbenk med manualer","sett":"3","reps":"8","rpe":"8","hvile":"2 min","notat":"","slik":"Sett benken på svak skråning. Press manualene opp og litt mot hverandre over brystet, og senk rolig til du kjenner strekk foran på brystet."},
+      {"ovelse":"Ansiktsdrag + bicepscurl","sett":"2","reps":"12","rpe":"9","hvile":"60 sek","notat":"Superset, rask avslutning.","slik":"Ansiktsdrag: dra et tau fra kabel inn mot ansiktet med høye albuer — bra for skuldrene. Curl: hold manualer, bøy albuene og løft vekten opp mot skuldrene uten å svinge. «Superset» betyr at du tar de to rett etter hverandre uten lang pause."}]}
   ],
   "progresjon":"Dobbel progresjon: klarer du øvre ende av rep-området på alle sett med riktig RPE, øk vekten neste gang (2,5–5 kg på basisløft). Hver 6.–8. uke: en lettere uke med ~2/3 av vektene. Ved høyt stress: bli en uke til på samme vekt heller enn å presse.",
   "tilpasninger":"Korsryggen styrer hoftehengselet: rumensk markløft med moderat RPE, og du stopper settet idet formen begynner å ryke — ikke ved tellingen. Frontbøy er ryggvennligere enn knebøy de dagene ryggen er sliten.",
